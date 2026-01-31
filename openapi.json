@@ -1,0 +1,1854 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "Kigurumi Data API",
+		"version": "2.0.0"
+	},
+	"paths": {
+		"/": {
+			"get": {
+				"summary": "Root",
+				"operationId": "root__get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MessageResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/crawl/twitter/user": {
+			"post": {
+				"summary": "Crawl Twitter User",
+				"operationId": "crawl_twitter_user_crawl_twitter_user_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CrawlTwitterUserRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TwitterUserCrawlResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/crawl/twitter/tweet": {
+			"post": {
+				"summary": "Crawl Twitter Tweet",
+				"operationId": "crawl_twitter_tweet_crawl_twitter_tweet_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CrawlTwitterTweetRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TwitterTweetCrawlResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/crawl/image": {
+			"post": {
+				"summary": "Crawl Image",
+				"operationId": "crawl_image_crawl_image_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CrawlImageRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ImageCharacterCrawlResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/kiger": {
+			"post": {
+				"summary": "Submit Kiger",
+				"operationId": "submit_kiger_kiger_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Kiger"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SubmitResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/character": {
+			"post": {
+				"summary": "Submit Character",
+				"operationId": "submit_character_character_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Character"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SubmitResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/maker": {
+			"post": {
+				"summary": "Submit Maker",
+				"description": "提交 Maker 資料，進入待審核狀態",
+				"operationId": "submit_maker_maker_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Maker"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SubmitResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/kigers": {
+			"get": {
+				"summary": "Get All Kigers",
+				"description": "取得所有 Kiger 資料",
+				"operationId": "get_all_kigers_kigers_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/KigerListItemResponse"
+									},
+									"type": "array",
+									"title": "Response Get All Kigers Kigers Get"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/kiger/{kiger_id}": {
+			"get": {
+				"summary": "Get Kiger",
+				"description": "取得單一 Kiger 資料",
+				"operationId": "get_kiger_kiger__kiger_id__get",
+				"parameters": [
+					{
+						"name": "kiger_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"title": "Kiger Id"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KigerDetailResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/characters": {
+			"get": {
+				"summary": "Get All Characters",
+				"description": "取得所有 Character 資料",
+				"operationId": "get_all_characters_characters_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CharacterResponse"
+									},
+									"type": "array",
+									"title": "Response Get All Characters Characters Get"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/character/{character_id}": {
+			"get": {
+				"summary": "Get Character",
+				"description": "取得單一 Character 資料",
+				"operationId": "get_character_character__character_id__get",
+				"parameters": [
+					{
+						"name": "character_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"title": "Character Id"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CharacterResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/makers": {
+			"get": {
+				"summary": "Get All Makers",
+				"description": "取得所有 Maker 資料",
+				"operationId": "get_all_makers_makers_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/MakerResponse"
+									},
+									"type": "array",
+									"title": "Response Get All Makers Makers Get"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/maker/{maker_id}": {
+			"get": {
+				"summary": "Get Maker",
+				"operationId": "get_maker_maker__maker_id__get",
+				"parameters": [
+					{
+						"name": "maker_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"title": "Maker Id"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MakerResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/login": {
+			"post": {
+				"summary": "Admin Login",
+				"operationId": "admin_login_admin_login_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/pending/kigers": {
+			"get": {
+				"summary": "Get Pending Kigers",
+				"operationId": "get_pending_kigers_admin_pending_kigers_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PendingKigerResponse"
+									},
+									"type": "array",
+									"title": "Response Get Pending Kigers Admin Pending Kigers Get"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				]
+			}
+		},
+		"/admin/pending/characters": {
+			"get": {
+				"summary": "Get Pending Characters",
+				"operationId": "get_pending_characters_admin_pending_characters_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PendingCharacterResponse"
+									},
+									"type": "array",
+									"title": "Response Get Pending Characters Admin Pending Characters Get"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				]
+			}
+		},
+		"/admin/pending/makers": {
+			"get": {
+				"summary": "Get Pending Makers",
+				"operationId": "get_pending_makers_admin_pending_makers_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PendingMakerResponse"
+									},
+									"type": "array",
+									"title": "Response Get Pending Makers Admin Pending Makers Get"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				]
+			}
+		},
+		"/admin/review/kiger/{kiger_id}": {
+			"post": {
+				"summary": "Review Kiger",
+				"operationId": "review_kiger_admin_review_kiger__kiger_id__post",
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "kiger_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"title": "Kiger Id"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReviewRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ReviewResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/review/character/{character_id}": {
+			"post": {
+				"summary": "Review Character",
+				"description": "審核 Character 資料",
+				"operationId": "review_character_admin_review_character__character_id__post",
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "character_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"title": "Character Id"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReviewRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ReviewResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/review/maker/{maker_id}": {
+			"post": {
+				"summary": "Review Maker",
+				"description": "審核 Maker 資料",
+				"operationId": "review_maker_admin_review_maker__maker_id__post",
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "maker_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"title": "Maker Id"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReviewRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ReviewResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Character": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"originalName": {
+						"type": "string",
+						"title": "Originalname"
+					},
+					"type": {
+						"type": "string",
+						"title": "Type"
+					},
+					"officialImage": {
+						"type": "string",
+						"title": "Officialimage"
+					},
+					"source": {
+						"$ref": "#/components/schemas/Source"
+					}
+				},
+				"type": "object",
+				"required": ["name", "originalName", "type", "officialImage", "source"],
+				"title": "Character"
+			},
+			"CharacterReference": {
+				"properties": {
+					"characterId": {
+						"type": "string",
+						"title": "Characterid"
+					},
+					"maker": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Maker"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Images"
+					}
+				},
+				"type": "object",
+				"required": ["characterId", "images"],
+				"title": "CharacterReference"
+			},
+			"CharacterReferenceResponse": {
+				"properties": {
+					"characterId": {
+						"type": "integer",
+						"title": "Characterid"
+					},
+					"maker": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Maker"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Images",
+						"default": []
+					}
+				},
+				"type": "object",
+				"required": ["characterId"],
+				"title": "CharacterReferenceResponse",
+				"description": "角色引用回應（在 Kiger 詳情中使用）"
+			},
+			"CharacterResponse": {
+				"properties": {
+					"id": {
+						"type": "integer",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"originalName": {
+						"type": "string",
+						"title": "Originalname"
+					},
+					"type": {
+						"type": "string",
+						"title": "Type"
+					},
+					"officialImage": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Officialimage",
+						"default": ""
+					},
+					"source": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Source"
+					}
+				},
+				"type": "object",
+				"required": ["id", "name", "originalName", "type"],
+				"title": "CharacterResponse",
+				"description": "角色資料回應"
+			},
+			"CrawlImageRequest": {
+				"properties": {
+					"image_url": {
+						"type": "string",
+						"title": "Image Url",
+						"description": "要識別的圖片 URL"
+					}
+				},
+				"type": "object",
+				"required": ["image_url"],
+				"title": "CrawlImageRequest",
+				"description": "從圖片 URL 識別角色的請求"
+			},
+			"CrawlTwitterTweetRequest": {
+				"properties": {
+					"username": {
+						"type": "string",
+						"title": "Username"
+					},
+					"tweet_id": {
+						"type": "string",
+						"title": "Tweet Id"
+					}
+				},
+				"type": "object",
+				"required": ["username", "tweet_id"],
+				"title": "CrawlTwitterTweetRequest"
+			},
+			"CrawlTwitterUserRequest": {
+				"properties": {
+					"username": {
+						"type": "string",
+						"title": "Username"
+					}
+				},
+				"type": "object",
+				"required": ["username"],
+				"title": "CrawlTwitterUserRequest"
+			},
+			"HTTPValidationError": {
+				"properties": {
+					"detail": {
+						"items": {
+							"$ref": "#/components/schemas/ValidationError"
+						},
+						"type": "array",
+						"title": "Detail"
+					}
+				},
+				"type": "object",
+				"title": "HTTPValidationError"
+			},
+			"ImageCharacterCrawlResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"title": "Success"
+					},
+					"character": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Character"
+					},
+					"error": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Error"
+					}
+				},
+				"type": "object",
+				"required": ["success"],
+				"title": "ImageCharacterCrawlResponse",
+				"description": "圖片角色識別回應"
+			},
+			"Kiger": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"bio": {
+						"type": "string",
+						"title": "Bio"
+					},
+					"profileImage": {
+						"type": "string",
+						"title": "Profileimage"
+					},
+					"position": {
+						"type": "string",
+						"title": "Position",
+						"default": ""
+					},
+					"isActive": {
+						"type": "boolean",
+						"title": "Isactive"
+					},
+					"socialMedia": {
+						"$ref": "#/components/schemas/SocialMedia"
+					},
+					"Characters": {
+						"items": {
+							"$ref": "#/components/schemas/CharacterReference"
+						},
+						"type": "array",
+						"title": "Characters"
+					},
+					"createdAt": {
+						"type": "string",
+						"title": "Createdat"
+					},
+					"updatedAt": {
+						"type": "string",
+						"title": "Updatedat"
+					}
+				},
+				"type": "object",
+				"required": [
+					"id",
+					"name",
+					"bio",
+					"profileImage",
+					"isActive",
+					"socialMedia",
+					"Characters",
+					"createdAt",
+					"updatedAt"
+				],
+				"title": "Kiger"
+			},
+			"KigerDetailResponse": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"bio": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Bio",
+						"default": ""
+					},
+					"profileImage": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Profileimage",
+						"default": ""
+					},
+					"position": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Position",
+						"default": ""
+					},
+					"isActive": {
+						"type": "boolean",
+						"title": "Isactive",
+						"default": true
+					},
+					"socialMedia": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Socialmedia"
+					},
+					"Characters": {
+						"items": {
+							"$ref": "#/components/schemas/CharacterReferenceResponse"
+						},
+						"type": "array",
+						"title": "Characters",
+						"default": []
+					},
+					"createdAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Createdat"
+					},
+					"updatedAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Updatedat"
+					}
+				},
+				"type": "object",
+				"required": ["id", "name"],
+				"title": "KigerDetailResponse",
+				"description": "Kiger 詳細資料回應"
+			},
+			"KigerListItemResponse": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"bio": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Bio",
+						"default": ""
+					},
+					"profileImage": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Profileimage",
+						"default": ""
+					},
+					"position": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Position",
+						"default": ""
+					},
+					"isActive": {
+						"type": "boolean",
+						"title": "Isactive",
+						"default": true
+					},
+					"socialMedia": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Socialmedia"
+					},
+					"createdAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Createdat"
+					},
+					"updatedAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Updatedat"
+					}
+				},
+				"type": "object",
+				"required": ["id", "name"],
+				"title": "KigerListItemResponse",
+				"description": "Kiger 列表項目回應"
+			},
+			"LoginRequest": {
+				"properties": {
+					"username": {
+						"type": "string",
+						"title": "Username"
+					},
+					"password": {
+						"type": "string",
+						"title": "Password"
+					}
+				},
+				"type": "object",
+				"required": ["username", "password"],
+				"title": "LoginRequest"
+			},
+			"LoginResponse": {
+				"properties": {
+					"access_token": {
+						"type": "string",
+						"title": "Access Token"
+					},
+					"token_type": {
+						"type": "string",
+						"title": "Token Type",
+						"default": "bearer"
+					},
+					"username": {
+						"type": "string",
+						"title": "Username"
+					}
+				},
+				"type": "object",
+				"required": ["access_token", "username"],
+				"title": "LoginResponse",
+				"description": "登入回應"
+			},
+			"Maker": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"originalName": {
+						"type": "string",
+						"title": "Originalname"
+					},
+					"Avatar": {
+						"type": "string",
+						"title": "Avatar"
+					},
+					"socialMedia": {
+						"$ref": "#/components/schemas/MakerSocialMedia"
+					}
+				},
+				"type": "object",
+				"required": ["name", "originalName", "Avatar", "socialMedia"],
+				"title": "Maker"
+			},
+			"MakerResponse": {
+				"properties": {
+					"id": {
+						"type": "integer",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"originalName": {
+						"type": "string",
+						"title": "Originalname"
+					},
+					"Avatar": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Avatar",
+						"default": ""
+					},
+					"socialMedia": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Socialmedia"
+					}
+				},
+				"type": "object",
+				"required": ["id", "name", "originalName"],
+				"title": "MakerResponse",
+				"description": "Maker 資料回應"
+			},
+			"MakerSocialMedia": {
+				"properties": {
+					"twitter": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Twitter"
+					},
+					"facebook": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Facebook"
+					},
+					"taobao": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Taobao"
+					},
+					"amazon": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Amazon"
+					},
+					"website": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Website"
+					}
+				},
+				"type": "object",
+				"title": "MakerSocialMedia"
+			},
+			"MessageResponse": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"title": "Message"
+					}
+				},
+				"type": "object",
+				"required": ["message"],
+				"title": "MessageResponse",
+				"description": "通用訊息回應"
+			},
+			"PendingCharacterResponse": {
+				"properties": {
+					"id": {
+						"type": "integer",
+						"title": "Id"
+					},
+					"originalName": {
+						"type": "string",
+						"title": "Originalname"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"type": {
+						"type": "string",
+						"title": "Type"
+					},
+					"officialImage": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Officialimage",
+						"default": ""
+					},
+					"source": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Source"
+					},
+					"status": {
+						"type": "string",
+						"title": "Status"
+					},
+					"submitted_at": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Submitted At"
+					}
+				},
+				"type": "object",
+				"required": ["id", "originalName", "name", "type", "status"],
+				"title": "PendingCharacterResponse",
+				"description": "待審核 Character 回應"
+			},
+			"PendingKigerResponse": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"bio": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Bio",
+						"default": ""
+					},
+					"profileImage": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Profileimage",
+						"default": ""
+					},
+					"position": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Position",
+						"default": ""
+					},
+					"isActive": {
+						"type": "boolean",
+						"title": "Isactive",
+						"default": true
+					},
+					"socialMedia": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Socialmedia"
+					},
+					"Characters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Characters",
+						"default": []
+					},
+					"status": {
+						"type": "string",
+						"title": "Status"
+					},
+					"submitted_at": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Submitted At"
+					}
+				},
+				"type": "object",
+				"required": ["id", "name", "status"],
+				"title": "PendingKigerResponse",
+				"description": "待審核 Kiger 回應"
+			},
+			"PendingMakerResponse": {
+				"properties": {
+					"id": {
+						"type": "integer",
+						"title": "Id"
+					},
+					"originalName": {
+						"type": "string",
+						"title": "Originalname"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"Avatar": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Avatar",
+						"default": ""
+					},
+					"socialMedia": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Socialmedia"
+					},
+					"status": {
+						"type": "string",
+						"title": "Status"
+					},
+					"submitted_at": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Submitted At"
+					}
+				},
+				"type": "object",
+				"required": ["id", "originalName", "name", "status"],
+				"title": "PendingMakerResponse",
+				"description": "待審核 Maker 回應"
+			},
+			"ReviewRequest": {
+				"properties": {
+					"action": {
+						"type": "string",
+						"title": "Action"
+					}
+				},
+				"type": "object",
+				"required": ["action"],
+				"title": "ReviewRequest"
+			},
+			"ReviewResponse": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"title": "Message"
+					},
+					"status": {
+						"type": "string",
+						"title": "Status"
+					}
+				},
+				"type": "object",
+				"required": ["message", "status"],
+				"title": "ReviewResponse",
+				"description": "審核回應"
+			},
+			"SocialMedia": {
+				"properties": {
+					"instagram": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Instagram"
+					},
+					"twitter": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Twitter"
+					},
+					"facebook": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Facebook"
+					},
+					"tiktok": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Tiktok"
+					},
+					"pixiv": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Pixiv"
+					},
+					"website": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Website"
+					}
+				},
+				"type": "object",
+				"title": "SocialMedia"
+			},
+			"Source": {
+				"properties": {
+					"title": {
+						"type": "string",
+						"title": "Title"
+					},
+					"company": {
+						"type": "string",
+						"title": "Company"
+					},
+					"releaseYear": {
+						"type": "integer",
+						"title": "Releaseyear"
+					}
+				},
+				"type": "object",
+				"required": ["title", "company", "releaseYear"],
+				"title": "Source"
+			},
+			"SubmitResponse": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"title": "Message"
+					},
+					"status": {
+						"type": "string",
+						"title": "Status"
+					},
+					"id": {
+						"type": "string",
+						"title": "Id"
+					}
+				},
+				"type": "object",
+				"required": ["message", "status", "id"],
+				"title": "SubmitResponse",
+				"description": "提交資料的回應"
+			},
+			"TwitterTweetCrawlResponse": {
+				"properties": {
+					"character": {
+						"anyOf": [
+							{
+								"additionalProperties": true,
+								"type": "object"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Character"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Images",
+						"default": []
+					}
+				},
+				"type": "object",
+				"title": "TwitterTweetCrawlResponse",
+				"description": "Twitter 推文爬蟲回應"
+			},
+			"TwitterUserCrawlResponse": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"bio": {
+						"type": "string",
+						"title": "Bio"
+					},
+					"profileImage": {
+						"type": "string",
+						"title": "Profileimage"
+					},
+					"position": {
+						"type": "string",
+						"title": "Position"
+					},
+					"isActive": {
+						"type": "boolean",
+						"title": "Isactive"
+					},
+					"socialMedia": {
+						"additionalProperties": true,
+						"type": "object",
+						"title": "Socialmedia"
+					},
+					"Characters": {
+						"items": {
+							"$ref": "#/components/schemas/CharacterReferenceResponse"
+						},
+						"type": "array",
+						"title": "Characters"
+					},
+					"createdAt": {
+						"type": "string",
+						"title": "Createdat"
+					},
+					"updatedAt": {
+						"type": "string",
+						"title": "Updatedat"
+					}
+				},
+				"type": "object",
+				"required": [
+					"id",
+					"name",
+					"bio",
+					"profileImage",
+					"position",
+					"isActive",
+					"socialMedia",
+					"Characters",
+					"createdAt",
+					"updatedAt"
+				],
+				"title": "TwitterUserCrawlResponse",
+				"description": "Twitter 用戶爬蟲回應"
+			},
+			"ValidationError": {
+				"properties": {
+					"loc": {
+						"items": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "integer"
+								}
+							]
+						},
+						"type": "array",
+						"title": "Location"
+					},
+					"msg": {
+						"type": "string",
+						"title": "Message"
+					},
+					"type": {
+						"type": "string",
+						"title": "Error Type"
+					}
+				},
+				"type": "object",
+				"required": ["loc", "msg", "type"],
+				"title": "ValidationError"
+			}
+		},
+		"securitySchemes": {
+			"HTTPBearer": {
+				"type": "http",
+				"scheme": "bearer"
+			}
+		}
+	}
+}
