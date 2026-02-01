@@ -722,6 +722,171 @@
 					}
 				}
 			}
+		},
+		"/admin/kiger/{kiger_id}": {
+			"put": {
+				"summary": "Update Kiger",
+				"description": "管理員直接修改 Kiger 資料",
+				"operationId": "update_kiger_admin_kiger__kiger_id__put",
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "kiger_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"title": "Kiger Id"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Kiger"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/KigerDetailResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/character/{character_id}": {
+			"put": {
+				"summary": "Update Character",
+				"description": "管理員直接修改 Character 資料",
+				"operationId": "update_character_admin_character__character_id__put",
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "character_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"title": "Character Id"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Character"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CharacterResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/maker/{maker_id}": {
+			"put": {
+				"summary": "Update Maker",
+				"description": "管理員直接修改 Maker 資料",
+				"operationId": "update_maker_admin_maker__maker_id__put",
+				"security": [
+					{
+						"HTTPBearer": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "maker_id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"title": "Maker Id"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Maker"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MakerResponse"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -749,7 +914,13 @@
 					}
 				},
 				"type": "object",
-				"required": ["name", "originalName", "type", "officialImage", "source"],
+				"required": [
+					"name",
+					"originalName",
+					"type",
+					"officialImage",
+					"source"
+				],
 				"title": "Character"
 			},
 			"CharacterReference": {
@@ -778,7 +949,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["characterId", "images"],
+				"required": [
+					"characterId",
+					"images"
+				],
 				"title": "CharacterReference"
 			},
 			"CharacterReferenceResponse": {
@@ -808,7 +982,9 @@
 					}
 				},
 				"type": "object",
-				"required": ["characterId"],
+				"required": [
+					"characterId"
+				],
 				"title": "CharacterReferenceResponse",
 				"description": "角色引用回應（在 Kiger 詳情中使用）"
 			},
@@ -856,7 +1032,12 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "name", "originalName", "type"],
+				"required": [
+					"id",
+					"name",
+					"originalName",
+					"type"
+				],
 				"title": "CharacterResponse",
 				"description": "角色資料回應"
 			},
@@ -869,7 +1050,9 @@
 					}
 				},
 				"type": "object",
-				"required": ["image_url"],
+				"required": [
+					"image_url"
+				],
 				"title": "CrawlImageRequest",
 				"description": "從圖片 URL 識別角色的請求"
 			},
@@ -885,7 +1068,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["username", "tweet_id"],
+				"required": [
+					"username",
+					"tweet_id"
+				],
 				"title": "CrawlTwitterTweetRequest"
 			},
 			"CrawlTwitterUserRequest": {
@@ -896,7 +1082,9 @@
 					}
 				},
 				"type": "object",
-				"required": ["username"],
+				"required": [
+					"username"
+				],
 				"title": "CrawlTwitterUserRequest"
 			},
 			"HTTPValidationError": {
@@ -943,7 +1131,9 @@
 					}
 				},
 				"type": "object",
-				"required": ["success"],
+				"required": [
+					"success"
+				],
 				"title": "ImageCharacterCrawlResponse",
 				"description": "圖片角色識別回應"
 			},
@@ -1102,7 +1292,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "name"],
+				"required": [
+					"id",
+					"name"
+				],
 				"title": "KigerDetailResponse",
 				"description": "Kiger 詳細資料回應"
 			},
@@ -1193,7 +1386,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "name"],
+				"required": [
+					"id",
+					"name"
+				],
 				"title": "KigerListItemResponse",
 				"description": "Kiger 列表項目回應"
 			},
@@ -1209,7 +1405,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["username", "password"],
+				"required": [
+					"username",
+					"password"
+				],
 				"title": "LoginRequest"
 			},
 			"LoginResponse": {
@@ -1229,7 +1428,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["access_token", "username"],
+				"required": [
+					"access_token",
+					"username"
+				],
 				"title": "LoginResponse",
 				"description": "登入回應"
 			},
@@ -1252,7 +1454,12 @@
 					}
 				},
 				"type": "object",
-				"required": ["name", "originalName", "Avatar", "socialMedia"],
+				"required": [
+					"name",
+					"originalName",
+					"Avatar",
+					"socialMedia"
+				],
 				"title": "Maker"
 			},
 			"MakerResponse": {
@@ -1295,7 +1502,11 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "name", "originalName"],
+				"required": [
+					"id",
+					"name",
+					"originalName"
+				],
 				"title": "MakerResponse",
 				"description": "Maker 資料回應"
 			},
@@ -1368,7 +1579,9 @@
 					}
 				},
 				"type": "object",
-				"required": ["message"],
+				"required": [
+					"message"
+				],
 				"title": "MessageResponse",
 				"description": "通用訊息回應"
 			},
@@ -1431,7 +1644,13 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "originalName", "name", "type", "status"],
+				"required": [
+					"id",
+					"originalName",
+					"name",
+					"type",
+					"status"
+				],
 				"title": "PendingCharacterResponse",
 				"description": "待審核 Character 回應"
 			},
@@ -1523,7 +1742,11 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "name", "status"],
+				"required": [
+					"id",
+					"name",
+					"status"
+				],
 				"title": "PendingKigerResponse",
 				"description": "待審核 Kiger 回應"
 			},
@@ -1582,7 +1805,12 @@
 					}
 				},
 				"type": "object",
-				"required": ["id", "originalName", "name", "status"],
+				"required": [
+					"id",
+					"originalName",
+					"name",
+					"status"
+				],
 				"title": "PendingMakerResponse",
 				"description": "待審核 Maker 回應"
 			},
@@ -1594,7 +1822,9 @@
 					}
 				},
 				"type": "object",
-				"required": ["action"],
+				"required": [
+					"action"
+				],
 				"title": "ReviewRequest"
 			},
 			"ReviewResponse": {
@@ -1609,7 +1839,10 @@
 					}
 				},
 				"type": "object",
-				"required": ["message", "status"],
+				"required": [
+					"message",
+					"status"
+				],
 				"title": "ReviewResponse",
 				"description": "審核回應"
 			},
@@ -1701,7 +1934,11 @@
 					}
 				},
 				"type": "object",
-				"required": ["title", "company", "releaseYear"],
+				"required": [
+					"title",
+					"company",
+					"releaseYear"
+				],
 				"title": "Source"
 			},
 			"SubmitResponse": {
@@ -1720,7 +1957,11 @@
 					}
 				},
 				"type": "object",
-				"required": ["message", "status", "id"],
+				"required": [
+					"message",
+					"status",
+					"id"
+				],
 				"title": "SubmitResponse",
 				"description": "提交資料的回應"
 			},
@@ -1840,7 +2081,11 @@
 					}
 				},
 				"type": "object",
-				"required": ["loc", "msg", "type"],
+				"required": [
+					"loc",
+					"msg",
+					"type"
+				],
 				"title": "ValidationError"
 			}
 		},

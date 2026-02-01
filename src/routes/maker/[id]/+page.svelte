@@ -23,8 +23,16 @@
 </script>
 
 <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-	<div class="mb-6">
+	<div class="mb-6 flex items-center justify-between">
 		<a href="/maker" class="text-blue-600 hover:text-blue-800">&larr; {m.back()}</a>
+		{#if maker}
+			<a
+				href="/maker/{makerId}/edit"
+				class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+			>
+				編輯
+			</a>
+		{/if}
 	</div>
 
 	{#if loading}

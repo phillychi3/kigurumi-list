@@ -74,6 +74,24 @@ export async function submitKiger(data: KigerSubmit): Promise<{ message: string 
 	})
 }
 
+export async function updateKiger(
+	id: string,
+	data: KigerSubmit,
+	token?: string
+): Promise<{ message: string }> {
+	if (token) {
+		return fetchWithAuth(`/admin/kiger/${id}`, token, {
+			method: 'PUT',
+			body: JSON.stringify(data)
+		})
+	} else {
+		return fetchAPI('/kiger', {
+			method: 'POST',
+			body: JSON.stringify(data)
+		})
+	}
+}
+
 export interface CharacterSource {
 	title: string
 	company: string
@@ -108,6 +126,24 @@ export async function submitCharacter(data: Character): Promise<{ message: strin
 	})
 }
 
+export async function updateCharacter(
+	id: number,
+	data: Character,
+	token?: string
+): Promise<{ message: string }> {
+	if (token) {
+		return fetchWithAuth(`/admin/character/${id}`, token, {
+			method: 'PUT',
+			body: JSON.stringify(data)
+		})
+	} else {
+		return fetchAPI('/character', {
+			method: 'POST',
+			body: JSON.stringify(data)
+		})
+	}
+}
+
 export interface MakerSocialMedia {
 	twitter?: string | null
 	facebook?: string | null
@@ -122,6 +158,24 @@ export interface Maker {
 	originalName: string
 	Avatar: string
 	socialMedia: MakerSocialMedia | null
+}
+
+export async function updateMaker(
+	id: number,
+	data: Maker,
+	token?: string
+): Promise<{ message: string }> {
+	if (token) {
+		return fetchWithAuth(`/admin/maker/${id}`, token, {
+			method: 'PUT',
+			body: JSON.stringify(data)
+		})
+	} else {
+		return fetchAPI('/maker', {
+			method: 'POST',
+			body: JSON.stringify(data)
+		})
+	}
 }
 
 export async function getMakers(): Promise<Maker[]> {
