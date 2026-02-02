@@ -86,5 +86,8 @@
 	"no_data": "No data available",
 	"twitter_url_hint": "e.g.: username or https://twitter.com/username",
 	"tweet_url_hint": "e.g.: https://twitter.com/username/status/1234567890",
-	"image_url_hint": "Please enter the full URL of the image"
+	"image_url_hint": "Please enter the full URL of the image",
+	"kiger_select_existing": "Select Existing",
+	"kiger_create_new": "Create New",
+	"kiger_character_source": "Source"
 }

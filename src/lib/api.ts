@@ -27,10 +27,19 @@ export interface KigerSocialMedia {
 	website?: string | null
 }
 
+export interface CharacterData {
+	name: string
+	originalName: string
+	type: string
+	officialImage: string
+	source?: CharacterSource | null
+}
+
 export interface CharacterReference {
 	characterId: string
 	maker?: string | null
 	images: string[]
+	characterData?: CharacterData
 }
 
 export interface KigerListItem {

@@ -86,5 +86,8 @@
 	"no_data": "目前沒有資料",
 	"twitter_url_hint": "例如：username 或 https://twitter.com/username",
 	"tweet_url_hint": "例如：https://twitter.com/username/status/1234567890",
-	"image_url_hint": "請輸入圖片的完整 URL"
+	"image_url_hint": "請輸入圖片的完整 URL",
+	"kiger_select_existing": "選擇已有角色",
+	"kiger_create_new": "建立新角色",
+	"kiger_character_source": "作品來源"
 }

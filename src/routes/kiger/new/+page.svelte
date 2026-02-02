@@ -8,7 +8,8 @@
 		getMakers,
 		type KigerSubmit,
 		type Character,
-		type Maker
+		type Maker,
+		type CharacterData
 	} from '$lib/api'
 	import SocialMediaForm from '$lib/components/SocialMediaForm.svelte'
 	import SearchSelect from '$lib/components/SearchSelect.svelte'
@@ -26,6 +27,8 @@
 
 	let characters: Character[] = $state([])
 	let makers: Maker[] = $state([])
+	// Track whether each character entry uses "existing" or "new" mode
+	let characterModes: ('existing' | 'new')[] = $state([])
 	let twitterInput = $state('')
 	let crawling = $state(false)
 	let crawlError = $state<string | null>(null)
@@ -70,6 +73,7 @@
 
 			if (formData.Characters.length === 0 && result.Characters.length > 0) {
 				formData.Characters = result.Characters
+				characterModes = result.Characters.map(() => 'existing')
 			}
 		} catch (e) {
 			crawlError = e instanceof Error ? e.message : String(e)
@@ -204,6 +208,7 @@
 							...formData.Characters,
 							{ characterId: '', maker: '', images: [] }
 						]
+						characterModes = [...characterModes, 'existing']
 					}}
 					class="rounded-md bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
 				>
@@ -222,6 +227,7 @@
 								type="button"
 								onclick={() => {
 									formData.Characters = formData.Characters.filter((_, i) => i !== index)
+									characterModes = characterModes.filter((_, i) => i !== index)
 								}}
 								class="text-sm text-red-600 hover:text-red-800"
 							>
@@ -229,19 +235,162 @@
 							</button>
 						</div>
 
+						<div class="mb-3 flex gap-2">
+							<button
+								type="button"
+								onclick={() => {
+									characterModes[index] = 'existing'
+									delete character.characterData
+									character.characterId = ''
+								}}
+								class="rounded-md px-3 py-1 text-sm {characterModes[index] === 'existing'
+									? 'bg-blue-600 text-white'
+									: 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
+							>
+								{m.kiger_select_existing()}
+							</button>
+							<button
+								type="button"
+								onclick={() => {
+									characterModes[index] = 'new'
+									character.characterData = {
+										name: '',
+										originalName: '',
+										type: '',
+										officialImage: '',
+										source: { title: '', company: '', releaseYear: 2024 }
+									}
+								}}
+								class="rounded-md px-3 py-1 text-sm {characterModes[index] === 'new'
+									? 'bg-blue-600 text-white'
+									: 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
+							>
+								{m.kiger_create_new()}
+							</button>
+						</div>
+
 						<div class="space-y-3">
-							<SearchSelect
-								options={characters.map((c) => ({
-									id: c.id,
-									name: c.name,
-									secondaryText: c.originalName
-								}))}
-								bind:value={character.characterId}
-								onselect={(id) => (character.characterId = id.toString())}
-								placeholder={m.search()}
-								required={true}
-								label={m.kiger_character_id()}
-							/>
+							{#if characterModes[index] === 'existing'}
+								<SearchSelect
+									options={characters.map((c) => ({
+										id: c.id,
+										name: c.name,
+										secondaryText: c.originalName
+									}))}
+									bind:value={character.characterId}
+									onselect={(id) => (character.characterId = id.toString())}
+									placeholder={m.search()}
+									required={true}
+									label={m.kiger_character_id()}
+								/>
+							{:else}
+								<div>
+									<label
+										for="char-name-{index}"
+										class="mb-1 block text-sm font-medium text-gray-700"
+									>
+										{m.character_name()} *
+									</label>
+									<input
+										type="text"
+										id="char-name-{index}"
+										bind:value={character.characterData.name}
+										required
+										class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+								<div>
+									<label
+										for="char-origname-{index}"
+										class="mb-1 block text-sm font-medium text-gray-700"
+									>
+										{m.character_original_name()} *
+									</label>
+									<input
+										type="text"
+										id="char-origname-{index}"
+										bind:value={character.characterData.originalName}
+										required
+										class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+								<div>
+									<label
+										for="char-type-{index}"
+										class="mb-1 block text-sm font-medium text-gray-700"
+									>
+										{m.character_type()} *
+									</label>
+									<input
+										type="text"
+										id="char-type-{index}"
+										bind:value={character.characterData.type}
+										required
+										class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+								<div>
+									<label
+										for="char-image-{index}"
+										class="mb-1 block text-sm font-medium text-gray-700"
+									>
+										{m.character_official_image()}
+									</label>
+									<input
+										type="url"
+										id="char-image-{index}"
+										bind:value={character.characterData.officialImage}
+										placeholder="https://..."
+										class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+
+								<fieldset class="rounded-md border border-gray-200 p-3">
+									<legend class="px-1 text-sm font-medium text-gray-600"
+										>{m.kiger_character_source()}</legend
+									>
+									<div class="space-y-2">
+										<div>
+											<label for="char-src-title-{index}" class="mb-1 block text-xs text-gray-600">
+												{m.character_source_title()}
+											</label>
+											<input
+												type="text"
+												id="char-src-title-{index}"
+												bind:value={character.characterData.source.title}
+												class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+										<div>
+											<label
+												for="char-src-company-{index}"
+												class="mb-1 block text-xs text-gray-600"
+											>
+												{m.character_source_company()}
+											</label>
+											<input
+												type="text"
+												id="char-src-company-{index}"
+												bind:value={character.characterData.source.company}
+												class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+										<div>
+											<label for="char-src-year-{index}" class="mb-1 block text-xs text-gray-600">
+												{m.character_source_year()}
+											</label>
+											<input
+												type="number"
+												id="char-src-year-{index}"
+												bind:value={character.characterData.source.releaseYear}
+												min="1900"
+												max="2100"
+												class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+									</div>
+								</fieldset>
+							{/if}
 
 							<SearchSelect
 								options={makers.map((m) => ({
