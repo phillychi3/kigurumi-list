@@ -277,23 +277,35 @@ export interface PendingKiger {
 	id: string
 	name: string
 	bio?: string | null
+	profileImage?: string | null
+	position?: string | null
+	isActive?: boolean
+	socialMedia?: KigerSocialMedia | null
+	Characters?: CharacterReference[]
 	status: string
 	submitted_at?: string | null
+	[key: string]: unknown
 }
 
 export interface PendingCharacter {
 	originalName: string
 	name: string
 	type: string
+	officialImage?: string | null
+	source?: CharacterSource | null
 	status: string
 	submitted_at?: string | null
+	[key: string]: unknown
 }
 
 export interface PendingMaker {
 	originalName: string
 	name: string
+	Avatar?: string | null
+	socialMedia?: MakerSocialMedia | null
 	status: string
 	submitted_at?: string | null
+	[key: string]: unknown
 }
 
 export async function getPendingKigers(token: string): Promise<PendingKiger[]> {

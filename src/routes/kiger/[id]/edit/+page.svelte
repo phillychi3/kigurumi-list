@@ -298,21 +298,28 @@
 
 								<div class="space-y-3">
 									<SearchSelect
-										items={characters}
+										options={characters.map((c) => ({
+											id: c.id,
+											name: c.name,
+											secondaryText: c.originalName
+										}))}
 										bind:value={char.characterId}
-										displayField="name"
-										valueField="id"
-										label="選擇角色 *"
+										onselect={(id) => (char.characterId = id.toString())}
 										placeholder="搜尋角色..."
+										required={true}
+										label="選擇角色"
 									/>
 
 									<SearchSelect
-										items={makers}
+										options={makers.map((mk) => ({
+											id: mk.id,
+											name: mk.name,
+											secondaryText: mk.originalName
+										}))}
 										bind:value={char.maker}
-										displayField="name"
-										valueField="id"
-										label="製作者"
+										onselect={(id) => (char.maker = id.toString())}
 										placeholder="搜尋製作者..."
+										label="製作者"
 									/>
 
 									<div>

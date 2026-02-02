@@ -42,6 +42,7 @@
 		]
 	},
 	"dependencies": {
-		"@iconify/svelte": "^5.2.1"
+		"@iconify/svelte": "^5.2.1",
+		"bits-ui": "^2.15.5"
 	}
 }
