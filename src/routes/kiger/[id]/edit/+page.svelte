@@ -113,7 +113,8 @@
 
 		try {
 			const token = $isAuthenticated ? getToken() : null
-			await updateKiger(kigerId, formData, token || undefined)
+			const submitData = token ? formData : { ...formData, referenceId: kigerId }
+			await updateKiger(kigerId, submitData, token || undefined)
 
 			if ($isAuthenticated) {
 				goto(`/kiger/${kigerId}`)

@@ -893,6 +893,17 @@
 		"schemas": {
 			"Character": {
 				"properties": {
+					"id": {
+						"anyOf": [
+							{
+								"type": "integer"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Id"
+					},
 					"name": {
 						"type": "string",
 						"title": "Name"
@@ -911,6 +922,28 @@
 					},
 					"source": {
 						"$ref": "#/components/schemas/Source"
+					},
+					"createdAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Createdat"
+					},
+					"updatedAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Updatedat"
 					}
 				},
 				"type": "object",
@@ -1140,8 +1173,26 @@
 			"Kiger": {
 				"properties": {
 					"id": {
-						"type": "string",
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
 						"title": "Id"
+					},
+					"referenceId": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Referenceid"
 					},
 					"name": {
 						"type": "string",
@@ -1175,25 +1226,36 @@
 						"title": "Characters"
 					},
 					"createdAt": {
-						"type": "string",
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
 						"title": "Createdat"
 					},
 					"updatedAt": {
-						"type": "string",
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
 						"title": "Updatedat"
 					}
 				},
 				"type": "object",
 				"required": [
-					"id",
 					"name",
 					"bio",
 					"profileImage",
 					"isActive",
 					"socialMedia",
-					"Characters",
-					"createdAt",
-					"updatedAt"
+					"Characters"
 				],
 				"title": "Kiger"
 			},
@@ -1437,6 +1499,17 @@
 			},
 			"Maker": {
 				"properties": {
+					"id": {
+						"anyOf": [
+							{
+								"type": "integer"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Id"
+					},
 					"name": {
 						"type": "string",
 						"title": "Name"
@@ -1451,6 +1524,28 @@
 					},
 					"socialMedia": {
 						"$ref": "#/components/schemas/MakerSocialMedia"
+					},
+					"createdAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Createdat"
+					},
+					"updatedAt": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Updatedat"
 					}
 				},
 				"type": "object",
@@ -1627,6 +1722,20 @@
 						],
 						"title": "Source"
 					},
+					"changedFields": {
+						"anyOf": [
+							{
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Changedfields"
+					},
 					"status": {
 						"type": "string",
 						"title": "Status"
@@ -1659,6 +1768,17 @@
 					"id": {
 						"type": "string",
 						"title": "Id"
+					},
+					"referenceId": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Referenceid"
 					},
 					"name": {
 						"type": "string",
@@ -1725,6 +1845,20 @@
 						"title": "Characters",
 						"default": []
 					},
+					"changedFields": {
+						"anyOf": [
+							{
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Changedfields"
+					},
 					"status": {
 						"type": "string",
 						"title": "Status"
@@ -1787,6 +1921,20 @@
 							}
 						],
 						"title": "Socialmedia"
+					},
+					"changedFields": {
+						"anyOf": [
+							{
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"title": "Changedfields"
 					},
 					"status": {
 						"type": "string",

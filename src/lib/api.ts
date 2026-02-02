@@ -57,6 +57,7 @@ export interface KigerSubmit {
 	isActive: boolean
 	socialMedia: KigerSocialMedia
 	Characters: CharacterReference[]
+	referenceId?: string
 }
 
 export async function getKigers(): Promise<KigerListItem[]> {
@@ -282,6 +283,8 @@ export interface PendingKiger {
 	isActive?: boolean
 	socialMedia?: KigerSocialMedia | null
 	Characters?: CharacterReference[]
+	referenceId?: string | null
+	changedFields?: string[] | null
 	status: string
 	submitted_at?: string | null
 	[key: string]: unknown
@@ -293,6 +296,7 @@ export interface PendingCharacter {
 	type: string
 	officialImage?: string | null
 	source?: CharacterSource | null
+	changedFields?: string[] | null
 	status: string
 	submitted_at?: string | null
 	[key: string]: unknown
@@ -303,6 +307,7 @@ export interface PendingMaker {
 	name: string
 	Avatar?: string | null
 	socialMedia?: MakerSocialMedia | null
+	changedFields?: string[] | null
 	status: string
 	submitted_at?: string | null
 	[key: string]: unknown

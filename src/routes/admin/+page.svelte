@@ -104,6 +104,14 @@
 		pendingKigers.length + pendingCharacters.length + pendingMakers.length
 	)
 
+	function isFieldChanged(changedFields: string[] | null | undefined, field: string): boolean {
+		return Array.isArray(changedFields) && changedFields.includes(field)
+	}
+
+	function changedFieldClass(changedFields: string[] | null | undefined, field: string): string {
+		return isFieldChanged(changedFields, field) ? 'ring-2 ring-yellow-400 bg-yellow-50 rounded px-1' : ''
+	}
+
 	const socialMediaLabels: Record<string, string> = {
 		twitter: 'Twitter',
 		instagram: 'Instagram',
@@ -218,7 +226,7 @@
 
 										<div class="min-w-0 flex-1">
 											<div class="flex items-center gap-3">
-												<h3 class="truncate text-lg font-semibold text-gray-900">
+												<h3 class="truncate text-lg font-semibold text-gray-900 {changedFieldClass(kiger.changedFields, 'name')}">
 													{kiger.name}
 												</h3>
 												<span
@@ -226,6 +234,20 @@
 												>
 													{kiger.status}
 												</span>
+												{#if kiger.changedFields === null || kiger.changedFields === undefined}
+													<span
+														class="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-blue-200"
+													>
+														新資料
+													</span>
+												{:else}
+													<span
+														class="shrink-0 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+														title={kiger.changedFields.join(', ')}
+													>
+														修改 ({kiger.changedFields.length})
+													</span>
+												{/if}
 												{#if kiger.isActive !== undefined}
 													<span
 														class="shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 {kiger.isActive
@@ -238,10 +260,10 @@
 											</div>
 											<p class="mt-0.5 text-xs text-gray-400">ID: {kiger.id}</p>
 											{#if kiger.position}
-												<p class="mt-1 text-sm text-gray-500">{kiger.position}</p>
+												<p class="mt-1 text-sm text-gray-500 {changedFieldClass(kiger.changedFields, 'position')}">{kiger.position}</p>
 											{/if}
 											{#if kiger.bio}
-												<p class="mt-2 text-sm text-gray-600">{kiger.bio}</p>
+												<p class="mt-2 text-sm text-gray-600 {changedFieldClass(kiger.changedFields, 'bio')}">{kiger.bio}</p>
 											{/if}
 
 											<!-- Social Media -->
@@ -393,7 +415,7 @@
 
 										<div class="min-w-0 flex-1">
 											<div class="flex items-center gap-3">
-												<h3 class="truncate text-lg font-semibold text-gray-900">
+												<h3 class="truncate text-lg font-semibold text-gray-900 {changedFieldClass(character.changedFields, 'name')}">
 													{character.name}
 												</h3>
 												<span
@@ -406,8 +428,22 @@
 												>
 													{character.status}
 												</span>
+												{#if character.changedFields === null || character.changedFields === undefined}
+													<span
+														class="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-blue-200"
+													>
+														新資料
+													</span>
+												{:else}
+													<span
+														class="shrink-0 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+														title={character.changedFields.join(', ')}
+													>
+														修改 ({character.changedFields.length})
+													</span>
+												{/if}
 											</div>
-											<p class="mt-1 text-sm text-gray-500">
+											<p class="mt-1 text-sm text-gray-500 {changedFieldClass(character.changedFields, 'originalName')}">
 												原名：{character.originalName}
 											</p>
 
@@ -512,7 +548,7 @@
 
 										<div class="min-w-0 flex-1">
 											<div class="flex items-center gap-3">
-												<h3 class="truncate text-lg font-semibold text-gray-900">
+												<h3 class="truncate text-lg font-semibold text-gray-900 {changedFieldClass(maker.changedFields, 'name')}">
 													{maker.name}
 												</h3>
 												<span
@@ -520,8 +556,22 @@
 												>
 													{maker.status}
 												</span>
+												{#if maker.changedFields === null || maker.changedFields === undefined}
+													<span
+														class="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-blue-200"
+													>
+														新資料
+													</span>
+												{:else}
+													<span
+														class="shrink-0 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200"
+														title={maker.changedFields.join(', ')}
+													>
+														修改 ({maker.changedFields.length})
+													</span>
+												{/if}
 											</div>
-											<p class="mt-1 text-sm text-gray-500">
+											<p class="mt-1 text-sm text-gray-500 {changedFieldClass(maker.changedFields, 'originalName')}">
 												原名：{maker.originalName}
 											</p>
 
