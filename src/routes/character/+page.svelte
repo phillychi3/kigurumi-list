@@ -1,24 +1,16 @@
 <script lang="ts">
 	import { m } from '$lib/paraglide/messages.js'
-	import { getCharacters, type Character } from '$lib/api'
-	import { onMount } from 'svelte'
-	import Loading from '$lib/components/Loading.svelte'
+	import type { Character } from '$lib/api'
 	import Error from '$lib/components/Error.svelte'
+	import SEO from '$lib/components/SEO.svelte'
 
-	let characters: Character[] = $state([])
-	let loading = $state(true)
-	let error = $state<string | null>(null)
-
-	onMount(async () => {
-		try {
-			characters = await getCharacters()
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e)
-		} finally {
-			loading = false
-		}
-	})
+	let { data } = $props<{ data: { characters: Character[]; error?: string } }>()
 </script>
+
+<SEO
+	title="{m.character_list()} | kiglist"
+	description="Browse anime and game characters with kigurumi"
+/>
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="mb-8 flex items-center justify-between">
@@ -28,17 +20,15 @@
 		</a>
 	</div>
 
-	{#if loading}
-		<Loading />
-	{:else if error}
-		<Error message={error} />
-	{:else if characters.length === 0}
+	{#if data.error}
+		<Error message={data.error} />
+	{:else if data.characters.length === 0}
 		<div class="py-12 text-center">
 			<p class="text-gray-500">{m.no_data()}</p>
 		</div>
 	{:else}
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-			{#each characters as character}
+			{#each data.characters as character}
 				<a
 					href="/character/{character.id}"
 					class="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"

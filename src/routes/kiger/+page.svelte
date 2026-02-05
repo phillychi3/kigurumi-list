@@ -1,24 +1,13 @@
 <script lang="ts">
 	import { m } from '$lib/paraglide/messages.js'
-	import { getKigers, type KigerListItem } from '$lib/api'
-	import { onMount } from 'svelte'
-	import Loading from '$lib/components/Loading.svelte'
+	import type { KigerListItem } from '$lib/api'
 	import Error from '$lib/components/Error.svelte'
+	import SEO from '$lib/components/SEO.svelte'
 
-	let kigers: KigerListItem[] = $state([])
-	let loading = $state(true)
-	let error = $state<string | null>(null)
-
-	onMount(async () => {
-		try {
-			kigers = await getKigers()
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e)
-		} finally {
-			loading = false
-		}
-	})
+	let { data } = $props<{ data: { kigers: KigerListItem[]; error?: string } }>()
 </script>
+
+<SEO title="{m.kiger_list()} | kiglist" description="Browse kigurumi performers in the community" />
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="mb-8 flex items-center justify-between">
@@ -28,17 +17,15 @@
 		</a>
 	</div>
 
-	{#if loading}
-		<Loading />
-	{:else if error}
-		<Error message={error} />
-	{:else if kigers.length === 0}
+	{#if data.error}
+		<Error message={data.error} />
+	{:else if data.kigers.length === 0}
 		<div class="py-12 text-center">
 			<p class="text-gray-500">{m.no_data()}</p>
 		</div>
 	{:else}
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			{#each kigers as kiger}
+			{#each data.kigers as kiger}
 				<a
 					href="/kiger/{kiger.id}"
 					class="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
