@@ -1,10 +1,8 @@
 import type { RequestHandler } from './$types'
+import { locales, baseLocale } from '$lib/paraglide/runtime'
 
 const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://kiglist.com'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001'
-
-const LOCALES = ['en', 'zh-tw', 'zh-cn'] as const
-const BASE_LOCALE = 'en'
 
 export const GET: RequestHandler = async ({ fetch }) => {
 	const staticPages = ['/', '/kiger', '/character', '/maker']
@@ -29,32 +27,49 @@ export const GET: RequestHandler = async ({ fetch }) => {
 
 	const allPages = [...staticPages, ...dynamicPages]
 
-	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${allPages.map((page) => generateUrlEntry(page)).join('\n')}
-</urlset>`
+	const urlEntries: string[] = []
+	for (const page of allPages) {
+		for (const locale of locales) {
+			urlEntries.push(generateUrlEntry(page, locale))
+		}
+	}
+
+	const sitemap = [
+		'<?xml version="1.0" encoding="UTF-8"?>',
+		'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+		...urlEntries,
+		'</urlset>'
+	].join('\n')
 
 	return new Response(sitemap, {
 		headers: {
-			'Content-Type': 'application/xml',
+			'Content-Type': 'application/xml; charset=utf-8',
 			'Cache-Control': 'max-age=3600'
 		}
 	})
 }
 
-function generateUrlEntry(path: string): string {
-	const today = new Date().toISOString().split('T')[0]
+function getLocalizedPath(path: string, locale: string): string {
+	return locale === baseLocale ? path : `/${locale}${path}`
+}
 
-	const hreflangLinks = LOCALES.map((locale) => {
-		const localizedPath = locale === BASE_LOCALE ? path : `/${locale}${path}`
-		return `    <xhtml:link rel="alternate" hreflang="${locale}" href="${SITE_URL}${localizedPath}" />`
-	}).join('\n')
+function generateUrlEntry(path: string, currentLocale: string): string {
+	const today = new Date().toISOString().split('T')[0]
+	const currentPath = getLocalizedPath(path, currentLocale)
+
+	const hreflangLinks = locales
+		.map((locale) => {
+			const localizedPath = getLocalizedPath(path, locale)
+			return `    <xhtml:link rel="alternate" hreflang="${locale}" href="${SITE_URL}${localizedPath}" />`
+		})
+		.join('\n')
+
+	const xDefaultPath = getLocalizedPath(path, baseLocale)
 
 	return `  <url>
-    <loc>${SITE_URL}${path}</loc>
+    <loc>${SITE_URL}${currentPath}</loc>
     <lastmod>${today}</lastmod>
 ${hreflangLinks}
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${path}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${xDefaultPath}" />
   </url>`
 }

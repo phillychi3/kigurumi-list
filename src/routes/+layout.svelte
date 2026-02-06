@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { locales, localizeHref, getLocale } from '$lib/paraglide/runtime'
+	import { locales, localizeHref, getLocale, deLocalizeHref } from '$lib/paraglide/runtime'
 	import Navbar from '$lib/components/Navbar.svelte'
 	import './layout.css'
 	import favicon from '$lib/assets/favicon.svg'
@@ -10,6 +10,7 @@
 	const siteUrl = import.meta.env.VITE_SITE_URL || 'https://kiglist.com'
 	const currentLocale = $derived(getLocale())
 	const canonicalUrl = $derived(`${siteUrl}${page.url.pathname}`)
+	const basePath = $derived(deLocalizeHref(page.url.pathname))
 </script>
 
 <svelte:head>
@@ -22,7 +23,7 @@
 		<link
 			rel="alternate"
 			hreflang={locale}
-			href={`${siteUrl}${localizeHref(page.url.pathname, { locale })}`}
+			href={`${siteUrl}${localizeHref(basePath, { locale })}`}
 		/>
 	{/each}
 	<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
