@@ -34,7 +34,7 @@
 			href="/character/{characterId}/edit"
 			class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
 		>
-			編輯
+			{m.edit()}
 		</a>
 	</div>
 
@@ -59,7 +59,7 @@
 				</div>
 
 				<div class="mb-6 rounded-lg bg-gray-50 p-4">
-					<h2 class="mb-2 text-sm font-semibold text-gray-700">作品資訊</h2>
+					<h2 class="mb-2 text-sm font-semibold text-gray-700">{m.character_source_info()}</h2>
 					<p class="text-gray-900">{data.character.source.title}</p>
 					<p class="text-sm text-gray-600">
 						{data.character.source.company} • {data.character.source.releaseYear}

@@ -74,11 +74,11 @@
 	{:else if loadError}
 		<Error message={loadError} />
 	{:else}
-		<h1 class="mb-8 text-3xl font-bold text-gray-900">編輯製作者</h1>
+		<h1 class="mb-8 text-3xl font-bold text-gray-900">{m.edit_maker()}</h1>
 
 		{#if !$isAuthenticated}
 			<div class="mb-6 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-				<p class="text-sm text-yellow-800">您的修改將提交審核，管理員審核通過後才會生效。</p>
+				<p class="text-sm text-yellow-800">{m.no_admin_edit_alert()}</p>
 			</div>
 		{/if}
 

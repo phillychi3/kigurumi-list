@@ -158,11 +158,11 @@
 	{:else if loadError}
 		<Error message={loadError} />
 	{:else}
-		<h1 class="mb-8 text-3xl font-bold text-gray-900">編輯角色</h1>
+		<h1 class="mb-8 text-3xl font-bold text-gray-900">{m.edit_character()}</h1>
 
 		{#if !$isAuthenticated}
 			<div class="mb-6 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-				<p class="text-sm text-yellow-800">您的修改將提交審核，管理員審核通過後才會生效。</p>
+				<p class="text-sm text-yellow-800">{m.no_admin_edit_alert()}</p>
 			</div>
 		{/if}
 
@@ -171,7 +171,9 @@
 				{m.character_image_crawl()} / {m.character_tweet_crawl()}
 			</h2>
 			<p class="mb-3 text-sm text-gray-600">
-				{m.image_url_hint()} 或 {m.tweet_url_hint()}
+				{m.image_url_hint()}
+				{m.or()}
+				{m.tweet_url_hint()}
 			</p>
 			<div class="flex gap-2">
 				<input
@@ -249,7 +251,7 @@
 			</div>
 
 			<div class="space-y-4 rounded-lg border border-gray-200 p-4">
-				<h3 class="font-semibold text-gray-900">作品資訊</h3>
+				<h3 class="font-semibold text-gray-900">{m.character_source_info()}</h3>
 
 				<div>
 					<label for="sourceTitle" class="mb-1 block text-sm font-medium text-gray-700">

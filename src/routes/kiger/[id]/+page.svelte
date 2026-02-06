@@ -28,7 +28,7 @@
 			href="/kiger/{kigerId}/edit"
 			class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
 		>
-			編輯
+			{m.edit()}
 		</a>
 	</div>
 

@@ -27,7 +27,6 @@
 	let submitting = $state(false)
 	let submitError = $state<string | null>(null)
 
-	// 從圖片或推文抓取角色資料
 	async function handleCrawl() {
 		if (!crawlInput.trim()) return
 
@@ -37,16 +36,13 @@
 		try {
 			const input = crawlInput.trim()
 
-			// 檢查是否為 Twitter 推文 URL
 			const tweetMatch = input.match(/(?:twitter\.com|x\.com)\/([^/]+)\/status\/(\d+)/)
 
 			if (tweetMatch) {
-				// Twitter 推文
 				const [, username, tweetId] = tweetMatch
 				const result = await crawlTwitterTweet(username, tweetId)
 
 				if (result.character) {
-					// 僅填充空欄位
 					if (!formData.name && result.character.name) formData.name = result.character.name
 					if (!formData.originalName && result.character.originalName)
 						formData.originalName = result.character.originalName
@@ -63,7 +59,6 @@
 					}
 				}
 			} else {
-				// 圖片 URL
 				const result = await crawlImage(input)
 
 				if (!result.success) {
@@ -72,7 +67,6 @@
 				}
 
 				if (result.character) {
-					// 僅填充空欄位
 					if (!formData.name && result.character.name) formData.name = result.character.name
 					if (!formData.originalName && result.character.originalName)
 						formData.originalName = result.character.originalName
@@ -95,7 +89,6 @@
 		}
 	}
 
-	// 提交表單
 	async function handleSubmit(event: Event) {
 		event.preventDefault()
 		submitting = true
@@ -119,19 +112,20 @@
 
 	<h1 class="mb-8 text-3xl font-bold text-gray-900">{m.character_new()}</h1>
 
-	<!-- 抓取區塊 -->
 	<div class="mb-8 rounded-lg border border-purple-200 bg-purple-50 p-6">
 		<h2 class="mb-4 text-lg font-semibold text-gray-900">
 			{m.character_image_crawl()} / {m.character_tweet_crawl()}
 		</h2>
 		<p class="mb-3 text-sm text-gray-600">
-			{m.image_url_hint()} 或 {m.tweet_url_hint()}
+			{m.image_url_hint()}
+			{m.or()}
+			{m.tweet_url_hint()}
 		</p>
 		<div class="flex gap-2">
 			<input
 				type="text"
 				bind:value={crawlInput}
-				placeholder="Image URL or Tweet URL"
+				placeholder={m.crawl_input_placeholder()}
 				class="flex-1 rounded-md border border-gray-300 px-3 py-2 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none"
 			/>
 			<button
@@ -148,9 +142,7 @@
 		{/if}
 	</div>
 
-	<!-- 表單 -->
 	<form onsubmit={handleSubmit} class="space-y-6 rounded-lg bg-white p-6 shadow">
-		<!-- Name -->
 		<div>
 			<label for="name" class="mb-1 block text-sm font-medium text-gray-700">
 				{m.character_name()} *
@@ -164,7 +156,6 @@
 			/>
 		</div>
 
-		<!-- Original Name -->
 		<div>
 			<label for="originalName" class="mb-1 block text-sm font-medium text-gray-700">
 				{m.character_original_name()} *
@@ -178,7 +169,6 @@
 			/>
 		</div>
 
-		<!-- Type -->
 		<div>
 			<label for="type" class="mb-1 block text-sm font-medium text-gray-700">
 				{m.character_type()} *
@@ -192,7 +182,6 @@
 			/>
 		</div>
 
-		<!-- Official Image -->
 		<div>
 			<label for="officialImage" class="mb-1 block text-sm font-medium text-gray-700">
 				{m.character_official_image()} *
@@ -207,9 +196,8 @@
 			/>
 		</div>
 
-		<!-- Source -->
 		<div class="space-y-4 rounded-lg border border-gray-200 p-4">
-			<h3 class="font-semibold text-gray-900">作品資訊</h3>
+			<h3 class="font-semibold text-gray-900">{m.character_source_info()}</h3>
 
 			<div>
 				<label for="sourceTitle" class="mb-1 block text-sm font-medium text-gray-700">
@@ -253,14 +241,12 @@
 			</div>
 		</div>
 
-		<!-- Submit Error -->
 		{#if submitError}
 			<div class="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
 				{submitError}
 			</div>
 		{/if}
 
-		<!-- Actions -->
 		<div class="flex justify-end gap-3">
 			<a
 				href="/character"

@@ -112,7 +112,7 @@
 			<input
 				type="text"
 				bind:value={twitterInput}
-				placeholder="username or URL"
+				placeholder={m.twitter_input_placeholder()}
 				class="flex-1 rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 			/>
 			<button
@@ -416,14 +416,14 @@
 									rows="3"
 									class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 								></textarea>
-								<p class="mt-1 text-xs text-gray-500">每行一個圖片網址</p>
+								<p class="mt-1 text-xs text-gray-500">{m.one_url_per_line()}</p>
 							</div>
 						</div>
 					</div>
 				{/each}
 
 				{#if formData.Characters.length === 0}
-					<p class="py-4 text-center text-sm text-gray-500">尚未新增角色，點擊上方按鈕新增</p>
+					<p class="py-4 text-center text-sm text-gray-500">{m.no_characters_hint()}</p>
 				{/if}
 			</div>
 		</div>

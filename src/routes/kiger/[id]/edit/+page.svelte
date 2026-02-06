@@ -119,7 +119,7 @@
 			if ($isAuthenticated) {
 				goto(`/kiger/${kigerId}`)
 			} else {
-				alert('修改已提交，等待審核')
+				alert(m.edit_submit_pending())
 				goto('/kiger')
 			}
 		} catch (e) {
@@ -167,11 +167,11 @@
 	{:else if loadError}
 		<Error message={loadError} />
 	{:else}
-		<h1 class="mb-8 text-3xl font-bold text-gray-900">編輯 Kiger</h1>
+		<h1 class="mb-8 text-3xl font-bold text-gray-900">{m.edit_kiger()}</h1>
 
 		{#if !$isAuthenticated}
 			<div class="mb-6 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-				<p class="text-sm text-yellow-800">您的修改將提交審核，管理員審核通過後才會生效。</p>
+				<p class="text-sm text-yellow-800">{m.no_admin_edit_alert()}</p>
 			</div>
 		{/if}
 
@@ -182,7 +182,7 @@
 				<input
 					type="text"
 					bind:value={twitterInput}
-					placeholder="username or URL"
+					placeholder={m.twitter_input_placeholder()}
 					class="flex-1 rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				/>
 				<button
@@ -276,24 +276,24 @@
 						onclick={addCharacter}
 						class="rounded-md bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
 					>
-						+ 新增角色
+						+ {m.kiger_add_character()}
 					</button>
 				</div>
 
 				{#if formData.Characters.length === 0}
-					<p class="text-sm text-gray-500">尚未新增角色</p>
+					<p class="text-sm text-gray-500">{m.no_characters_added()}</p>
 				{:else}
 					<div class="space-y-4">
 						{#each formData.Characters as char, charIndex}
 							<div class="rounded-lg border border-gray-200 p-4">
 								<div class="mb-3 flex items-center justify-between">
-									<h4 class="font-medium text-gray-900">角色 {charIndex + 1}</h4>
+									<h4 class="font-medium text-gray-900">{m.character_number({ number: charIndex + 1 })}</h4>
 									<button
 										type="button"
 										onclick={() => removeCharacter(charIndex)}
 										class="text-sm text-red-600 hover:text-red-800"
 									>
-										刪除
+										{m.delete()}
 									</button>
 								</div>
 
@@ -306,9 +306,9 @@
 										}))}
 										bind:value={char.characterId}
 										onselect={(id) => (char.characterId = id.toString())}
-										placeholder="搜尋角色..."
+										placeholder={m.search_character()}
 										required={true}
-										label="選擇角色"
+										label={m.select_character()}
 									/>
 
 									<SearchSelect
@@ -319,24 +319,24 @@
 										}))}
 										bind:value={char.maker}
 										onselect={(id) => (char.maker = id.toString())}
-										placeholder="搜尋製作者..."
-										label="製作者"
+										placeholder={m.search_maker()}
+										label={m.kiger_character_maker()}
 									/>
 
 									<div>
 										<div class="mb-2 flex items-center justify-between">
-											<label class="block text-sm font-medium text-gray-700"> 圖片 </label>
+											<label class="block text-sm font-medium text-gray-700"> {m.kiger_character_images()} </label>
 											<button
 												type="button"
 												onclick={() => addImage(charIndex)}
 												class="text-sm text-blue-600 hover:text-blue-800"
 											>
-												+ 新增圖片
+												+ {m.add_image()}
 											</button>
 										</div>
 
 										{#if char.images.length === 0}
-											<p class="text-sm text-gray-500">尚未新增圖片</p>
+											<p class="text-sm text-gray-500">{m.no_images_added()}</p>
 										{:else}
 											<div class="space-y-2">
 												{#each char.images as image, imageIndex}
