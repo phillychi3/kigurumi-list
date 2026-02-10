@@ -26,7 +26,7 @@
 	let loading = $state(true)
 	let error = $state<string | null>(null)
 
-	let processingId = $state<string | null>(null)
+	let processingId = $state<string | number | null>(null)
 
 	let activeTab = $state('kigers')
 
@@ -59,7 +59,7 @@
 
 	async function handleReview(
 		type: 'kiger' | 'character' | 'maker',
-		id: string,
+		id: string | number,
 		action: 'approve' | 'reject'
 	) {
 		const token = getToken()
@@ -69,11 +69,11 @@
 
 		try {
 			if (type === 'kiger') {
-				await reviewKiger(token, id, action)
+				await reviewKiger(token, id as string, action)
 			} else if (type === 'character') {
-				await reviewCharacter(token, id, action)
+				await reviewCharacter(token, id as number, action)
 			} else {
-				await reviewMaker(token, id, action)
+				await reviewMaker(token, id as number, action)
 			}
 
 			await loadData()
@@ -472,16 +472,16 @@
 										<div class="flex shrink-0 gap-2">
 											<button
 												onclick={() =>
-													handleReview('character', character.name, 'approve')}
-												disabled={processingId === character.name}
+													handleReview('character', character.id, 'approve')}
+												disabled={processingId === character.id}
 												class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:opacity-40"
 											>
 												{m.admin_approve()}
 											</button>
 											<button
 												onclick={() =>
-													handleReview('character', character.name, 'reject')}
-												disabled={processingId === character.name}
+													handleReview('character', character.id, 'reject')}
+												disabled={processingId === character.id}
 												class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-40"
 											>
 												{m.admin_reject()}
@@ -605,15 +605,15 @@
 
 										<div class="flex shrink-0 gap-2">
 											<button
-												onclick={() => handleReview('maker', maker.name, 'approve')}
-												disabled={processingId === maker.name}
+												onclick={() => handleReview('maker', maker.id, 'approve')}
+												disabled={processingId === maker.id}
 												class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:opacity-40"
 											>
 												{m.admin_approve()}
 											</button>
 											<button
-												onclick={() => handleReview('maker', maker.name, 'reject')}
-												disabled={processingId === maker.name}
+												onclick={() => handleReview('maker', maker.id, 'reject')}
+												disabled={processingId === maker.id}
 												class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-40"
 											>
 												{m.admin_reject()}

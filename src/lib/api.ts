@@ -300,6 +300,7 @@ export interface PendingKiger {
 }
 
 export interface PendingCharacter {
+	id: number
 	originalName: string
 	name: string
 	type: string
@@ -312,6 +313,7 @@ export interface PendingCharacter {
 }
 
 export interface PendingMaker {
+	id: number
 	originalName: string
 	name: string
 	Avatar?: string | null
@@ -352,7 +354,7 @@ export async function reviewKiger(
 
 export async function reviewCharacter(
 	token: string,
-	characterId: string,
+	characterId: number,
 	action: 'approve' | 'reject'
 ): Promise<ReviewResponse> {
 	return fetchWithAuth(`/admin/review/character/${characterId}`, token, {
@@ -363,7 +365,7 @@ export async function reviewCharacter(
 
 export async function reviewMaker(
 	token: string,
-	makerId: string,
+	makerId: number,
 	action: 'approve' | 'reject'
 ): Promise<ReviewResponse> {
 	return fetchWithAuth(`/admin/review/maker/${makerId}`, token, {
