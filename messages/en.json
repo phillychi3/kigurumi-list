@@ -109,5 +109,7 @@
 	"no_images_added": "No images added yet",
 	"one_url_per_line": "One URL per line",
 	"no_characters_hint": "No characters added yet, click the button above to add",
-	"maker_label": "Maker:"
+	"maker_label": "Maker:",
+	"source_search_placeholder": "Search existing sources...",
+	"source_search_label": "Search existing sources"
 }

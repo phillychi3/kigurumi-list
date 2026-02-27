@@ -108,6 +108,17 @@ export interface CharacterSource {
 	releaseYear: number
 }
 
+export interface SourceItem {
+	id: number
+	title: string
+	company: string
+	releaseYear: number
+}
+
+export async function getSources(): Promise<SourceItem[]> {
+	return fetchAPI('/sources')
+}
+
 export interface Character {
 	id: number
 	name: string

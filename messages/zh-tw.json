@@ -109,5 +109,7 @@
 	"no_images_added": "尚未新增圖片",
 	"one_url_per_line": "每行一個圖片網址",
 	"no_characters_hint": "尚未新增角色，點擊上方按鈕新增",
-	"maker_label": "店家:"
+	"maker_label": "店家:",
+	"source_search_placeholder": "搜尋已有來源...",
+	"source_search_label": "搜尋已有來源"
 }

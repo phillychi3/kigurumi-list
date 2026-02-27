@@ -1,12 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
 	import { m } from '$lib/paraglide/messages.js'
 	import {
 		submitCharacter,
 		crawlImage,
 		crawlTwitterTweet,
+		getSources,
 		type Character,
-		type CharacterSource
+		type SourceItem
 	} from '$lib/api'
 
 	let formData: Character = $state({
@@ -26,6 +28,49 @@
 	let crawlError = $state<string | null>(null)
 	let submitting = $state(false)
 	let submitError = $state<string | null>(null)
+
+	let allSources = $state<SourceItem[]>([])
+	let sourceSearch = $state('')
+	let filteredSources = $state<SourceItem[]>([])
+	let showSourceDropdown = $state(false)
+
+	onMount(async () => {
+		try {
+			allSources = await getSources()
+		} catch {
+			// silently fail — source search just won't suggest existing entries
+		}
+	})
+
+	function handleSourceInput() {
+		const q = sourceSearch.trim().toLowerCase()
+		if (!q) {
+			filteredSources = []
+			showSourceDropdown = false
+			return
+		}
+		filteredSources = allSources.filter(
+			(s) => s.title.toLowerCase().includes(q) || s.company.toLowerCase().includes(q)
+		)
+		showSourceDropdown = filteredSources.length > 0
+	}
+
+	function selectSource(source: SourceItem) {
+		formData.source = {
+			title: source.title,
+			company: source.company,
+			releaseYear: source.releaseYear
+		}
+		sourceSearch = source.title
+		showSourceDropdown = false
+	}
+
+	function hideDropdown() {
+		// Delay so click on dropdown item registers first
+		setTimeout(() => {
+			showSourceDropdown = false
+		}, 150)
+	}
 
 	async function handleCrawl() {
 		if (!crawlInput.trim()) return
@@ -198,6 +243,44 @@
 
 		<div class="space-y-4 rounded-lg border border-gray-200 p-4">
 			<h3 class="font-semibold text-gray-900">{m.character_source_info()}</h3>
+
+			<!-- Source search -->
+			<div class="relative">
+				<label for="sourceSearch" class="mb-1 block text-sm font-medium text-gray-700">
+					{m.source_search_label()}
+				</label>
+				<input
+					type="text"
+					id="sourceSearch"
+					bind:value={sourceSearch}
+					oninput={handleSourceInput}
+					onfocus={handleSourceInput}
+					onblur={hideDropdown}
+					placeholder={m.source_search_placeholder()}
+					class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+					autocomplete="off"
+				/>
+				{#if showSourceDropdown}
+					<ul
+						class="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
+					>
+						{#each filteredSources as source}
+							<li>
+								<button
+									type="button"
+									onmousedown={() => selectSource(source)}
+									class="w-full px-4 py-2 text-left hover:bg-gray-50"
+								>
+									<span class="font-medium">{source.title}</span>
+									<span class="text-sm text-gray-500">
+										— {source.company} ({source.releaseYear})</span
+									>
+								</button>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</div>
 
 			<div>
 				<label for="sourceTitle" class="mb-1 block text-sm font-medium text-gray-700">
