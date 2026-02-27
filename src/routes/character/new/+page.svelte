@@ -45,13 +45,22 @@
 	function handleSourceInput() {
 		const q = sourceSearch.trim().toLowerCase()
 		if (!q) {
-			filteredSources = []
-			showSourceDropdown = false
-			return
+			filteredSources = allSources
+		} else {
+			filteredSources = allSources.filter(
+				(s) => s.title.toLowerCase().includes(q) || s.company.toLowerCase().includes(q)
+			)
 		}
-		filteredSources = allSources.filter(
-			(s) => s.title.toLowerCase().includes(q) || s.company.toLowerCase().includes(q)
-		)
+		showSourceDropdown = filteredSources.length > 0
+	}
+
+	function handleSourceFocus() {
+		const q = sourceSearch.trim().toLowerCase()
+		filteredSources = q
+			? allSources.filter(
+					(s) => s.title.toLowerCase().includes(q) || s.company.toLowerCase().includes(q)
+				)
+			: allSources
 		showSourceDropdown = filteredSources.length > 0
 	}
 
@@ -254,7 +263,7 @@
 					id="sourceSearch"
 					bind:value={sourceSearch}
 					oninput={handleSourceInput}
-					onfocus={handleSourceInput}
+					onfocus={handleSourceFocus}
 					onblur={hideDropdown}
 					placeholder={m.source_search_placeholder()}
 					class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
