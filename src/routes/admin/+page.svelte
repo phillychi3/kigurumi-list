@@ -301,9 +301,9 @@
 																<p class="text-xs font-medium text-gray-700">
 																	{char.characterId}
 																</p>
-																{#if char.maker}
+																{#if char.makerName}
 																	<p class="text-xs text-gray-400">
-																		製作者：{char.maker}
+																		製作者：{char.makerName}
 																	</p>
 																{/if}
 																{#if char.images && char.images.length > 0}
