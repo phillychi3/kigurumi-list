@@ -43,7 +43,7 @@
 				<p class="mb-6 text-lg text-gray-600">{data.maker.originalName}</p>
 
 				{#if data.maker.socialMedia && Object.values(data.maker.socialMedia).some((v) => v)}
-					<div>
+					<div class="mb-6">
 						<h2 class="mb-3 text-lg font-semibold text-gray-900">{m.maker_social_media()}</h2>
 						<div class="flex flex-wrap gap-2">
 							{#each Object.entries(data.maker.socialMedia) as [platform, url]}
@@ -57,6 +57,33 @@
 										{platform}
 									</a>
 								{/if}
+							{/each}
+						</div>
+					</div>
+				{/if}
+
+				{#if data.maker.kigers && data.maker.kigers.length > 0}
+					<div>
+						<h2 class="mb-3 text-lg font-semibold text-gray-900">{m.kiger_characters()}</h2>
+						<div class="space-y-4">
+							{#each data.maker.kigers as entry}
+								<div class="rounded-lg border border-gray-200 p-4">
+									<a href="/kiger/{entry.kigerid}" class="font-medium text-blue-600 hover:underline">
+										{entry.kigername}
+									</a>
+									<p class="text-sm text-gray-600">
+										<a href="/character/{entry.characterId}" class="hover:underline">
+											{entry.characterName}
+										</a>
+									</p>
+									{#if entry.images && entry.images.length > 0}
+										<div class="mt-2 flex gap-2">
+											{#each entry.images as img}
+												<img src={img} alt={entry.characterName} class="h-20 w-20 rounded object-cover" />
+											{/each}
+										</div>
+									{/if}
+								</div>
 							{/each}
 						</div>
 					</div>

@@ -36,10 +36,21 @@ export interface CharacterData {
 }
 
 export interface CharacterReference {
-	characterId: string
-	maker?: string | null
+	characterId: number
+	characterName: string
+	makerId: number
+	makerName: string
 	images: string[]
-	characterData?: CharacterData
+}
+
+export interface KigerEntry {
+	kigerid: string
+	kigername: string
+	characterId: number
+	characterName: string
+	makerId: number
+	makerName: string
+	images: string[]
 }
 
 export interface KigerListItem {
@@ -129,7 +140,7 @@ export interface Character {
 }
 
 export interface CharacterDetail extends Character {
-	[key: string]: any
+	kigers?: KigerEntry[]
 }
 
 export async function getCharacters(): Promise<Character[]> {
@@ -179,6 +190,7 @@ export interface Maker {
 	originalName: string
 	Avatar: string
 	socialMedia: MakerSocialMedia | null
+	kigers?: KigerEntry[]
 }
 
 export async function updateMaker(

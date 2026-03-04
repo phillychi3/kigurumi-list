@@ -87,10 +87,12 @@
 							{#each data.kiger.Characters as char}
 								<div class="rounded-lg border border-gray-200 p-4">
 									<a href="/character/{char.characterId}" class="text-blue-600 hover:underline">
-										{char.characterId}
+										{char.characterName}
 									</a>
-									{#if char.maker}
-										<p class="text-sm text-gray-600">店家: {char.maker}</p>
+									{#if char.makerName}
+										<a href="/maker/{char.makerId}" class="block text-sm text-gray-600 hover:underline">
+											店家: {char.makerName}
+										</a>
 									{/if}
 									{#if char.images && char.images.length > 0}
 										<div class="mt-2 flex gap-2">

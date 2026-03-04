@@ -72,10 +72,10 @@
 						<div class="space-y-2">
 							{#each data.character.kigers as kiger}
 								<a
-									href="/kiger/{kiger.id}"
+									href="/kiger/{kiger.kigerid}"
 									class="block rounded-lg border border-gray-200 p-3 hover:bg-gray-50"
 								>
-									<p class="font-medium text-blue-600">{kiger.name}</p>
+									<p class="font-medium text-blue-600">{kiger.kigername}</p>
 								</a>
 							{/each}
 						</div>

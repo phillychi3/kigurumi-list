@@ -27,7 +27,7 @@
 			<p class="text-gray-500">{m.no_data()}</p>
 		</div>
 	{:else}
-		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
 			{#each data.characters as character}
 				<a
 					href="/character/{character.id}"
