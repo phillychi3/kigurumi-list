@@ -88,7 +88,17 @@
 		submitError = null
 
 		try {
-			await submitKiger(formData)
+			const submitData = {
+				...formData,
+				Characters: formData.Characters.map((char) => ({
+					...char,
+					images: (char.images as unknown as string)
+						.split('\n')
+						.map((url) => url.trim())
+						.filter(Boolean)
+				}))
+			}
+			await submitKiger(submitData)
 			goto('/kiger')
 		} catch (e) {
 			submitError = e instanceof Error ? e.message : String(e)
