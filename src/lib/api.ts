@@ -36,11 +36,18 @@ export interface CharacterData {
 }
 
 export interface CharacterReference {
-	characterId: number
+	characterId: number | null
 	characterName: string
 	makerId: number
 	makerName: string
 	images: string[]
+}
+
+export interface CharacterSubmit {
+	characterId?: number | null
+	makerId?: number | null
+	images: string[]
+	characterData?: CharacterData
 }
 
 export interface KigerEntry {
@@ -76,7 +83,7 @@ export interface KigerSubmit {
 	position?: string
 	isActive: boolean
 	socialMedia: KigerSocialMedia
-	Characters: CharacterReference[]
+	Characters: CharacterSubmit[]
 	referenceId?: string
 }
 

@@ -111,5 +111,8 @@
 	"no_characters_hint": "尚未新增角色，點擊上方按鈕新增",
 	"maker_label": "店家:",
 	"source_search_placeholder": "搜尋已有來源...",
-	"source_search_label": "搜尋已有來源"
+	"source_search_label": "搜尋已有來源",
+	"select_country": "選擇國家",
+	"select_state": "選擇州/省",
+	"select_city": "選擇城市"
 }

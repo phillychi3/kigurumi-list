@@ -7,7 +7,7 @@
 
 	interface Props {
 		options: Option[]
-		value: string | number
+		value: string | number | null | undefined
 		onselect: (id: number) => void
 		placeholder?: string
 		required?: boolean

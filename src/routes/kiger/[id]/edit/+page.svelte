@@ -20,6 +20,25 @@
 	import Error from '$lib/components/Error.svelte'
 	import { onMount } from 'svelte'
 
+	interface ICountry {
+		iso2: string
+		name: string
+		emoji: string
+	}
+	interface IState {
+		iso2: string
+		name: string
+	}
+
+	async function fetchCountries(): Promise<ICountry[]> {
+		const res = await fetch('/api/locations?type=countries')
+		return res.json()
+	}
+	async function fetchStates(countryCode: string): Promise<IState[]> {
+		const res = await fetch(`/api/locations?type=states&countryCode=${countryCode}`)
+		return res.json()
+	}
+
 	const kigerId = $derived(page.params.id)
 	let originalKiger: KigerDetail | null = $state(null)
 	let formData: KigerSubmit = $state({
@@ -34,6 +53,23 @@
 
 	let characters: Character[] = $state([])
 	let makers: Maker[] = $state([])
+	let countries: ICountry[] = $state([])
+	let states: IState[] = $state([])
+	let selectedCountryIso = $state('')
+	let selectedStateIso = $state('')
+	let loadingStates = $state(false)
+	let countrySearch = $state('')
+	let stateSearch = $state('')
+	let countryOpen = $state(false)
+	let stateOpen = $state(false)
+	let filteredCountries = $derived(
+		countries.filter((c) =>
+			`${c.emoji} ${c.name}`.toLowerCase().includes(countrySearch.toLowerCase())
+		)
+	)
+	let filteredStates = $derived(
+		states.filter((s) => s.name.toLowerCase().includes(stateSearch.toLowerCase()))
+	)
 	let twitterInput = $state('')
 	let crawling = $state(false)
 	let crawlError = $state<string | null>(null)
@@ -44,15 +80,17 @@
 
 	onMount(async () => {
 		try {
-			const [kigerData, charList, makerList] = await Promise.all([
+			const [kigerData, charList, makerList, countryList] = await Promise.all([
 				getKiger(kigerId),
 				getCharacters(),
-				getMakers()
+				getMakers(),
+				fetchCountries()
 			])
 
 			originalKiger = kigerData
 			characters = charList
 			makers = makerList
+			countries = countryList
 
 			formData = {
 				name: kigerData.name,
@@ -62,6 +100,29 @@
 				isActive: kigerData.isActive,
 				socialMedia: kigerData.socialMedia || {},
 				Characters: kigerData.Characters || []
+			}
+
+			// Try to parse stored position and pre-select country/state
+			if (kigerData.position) {
+				const parts = kigerData.position.split(', ')
+				const countryMatch = countryList.find(
+					(c) => c.name.toLowerCase() === parts[0]?.toLowerCase()
+				)
+				if (countryMatch) {
+					selectedCountryIso = countryMatch.iso2
+					countrySearch = countryMatch.name
+					const stateList = await fetchStates(countryMatch.iso2)
+					states = stateList
+					if (parts[1]) {
+						const stateMatch = stateList.find(
+							(s) => s.name.toLowerCase() === parts[1]?.toLowerCase()
+						)
+						if (stateMatch) {
+							selectedStateIso = stateMatch.iso2
+							stateSearch = stateMatch.name
+						}
+					}
+				}
 			}
 		} catch (e) {
 			loadError = e instanceof Error ? e.message : String(e)
@@ -88,7 +149,6 @@
 			if (!formData.name) formData.name = result.name
 			if (!formData.bio) formData.bio = result.bio
 			if (!formData.profileImage) formData.profileImage = result.profileImage
-			if (!formData.position) formData.position = result.position
 
 			for (const [key, value] of Object.entries(result.socialMedia)) {
 				if (value && !formData.socialMedia[key]) {
@@ -129,12 +189,43 @@
 		}
 	}
 
+	async function handleCountryChange(iso: string) {
+		selectedCountryIso = iso
+		selectedStateIso = ''
+		states = []
+		countrySearch = countries.find((c) => c.iso2 === iso)?.name ?? ''
+		stateSearch = ''
+		countryOpen = false
+		if (iso) {
+			loadingStates = true
+			try {
+				states = await fetchStates(iso)
+			} finally {
+				loadingStates = false
+			}
+		}
+		updatePosition()
+	}
+
+	function handleStateChange(iso: string) {
+		selectedStateIso = iso
+		stateSearch = states.find((s) => s.iso2 === iso)?.name ?? ''
+		stateOpen = false
+		updatePosition()
+	}
+
+	function updatePosition() {
+		const country = countries.find((c) => c.iso2 === selectedCountryIso)
+		const state = states.find((s) => s.iso2 === selectedStateIso)
+		const parts: string[] = [country?.name, state?.name].filter((p): p is string => Boolean(p))
+		formData.position = parts.join(', ')
+	}
+
 	function addCharacter() {
 		formData.Characters = [
 			...formData.Characters,
 			{
-				characterId: '',
-				maker: null,
+				characterId: null,
 				images: []
 			}
 		]
@@ -241,15 +332,99 @@
 			</div>
 
 			<div>
-				<label for="position" class="mb-1 block text-sm font-medium text-gray-700">
+				<label for="kiger-country" class="mb-1 block text-sm font-medium text-gray-700">
 					{m.kiger_position()}
 				</label>
-				<input
-					type="text"
-					id="position"
-					bind:value={formData.position}
-					class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-				/>
+				<div class="space-y-2">
+					<div class="relative">
+						<input
+							id="kiger-country"
+							type="text"
+							bind:value={countrySearch}
+							onfocus={() => (countryOpen = true)}
+							onblur={() => setTimeout(() => (countryOpen = false), 200)}
+							oninput={() => {
+								countryOpen = true
+								if (!countrySearch) {
+									selectedCountryIso = ''
+									selectedStateIso = ''
+									states = []
+									stateSearch = ''
+									updatePosition()
+								}
+							}}
+							placeholder={m.select_country()}
+							class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+						/>
+						{#if countryOpen && filteredCountries.length > 0}
+							<ul
+								class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
+							>
+								{#each filteredCountries as country}
+									<li>
+										<button
+											type="button"
+											class="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 {selectedCountryIso ===
+											country.iso2
+												? 'bg-blue-100 font-medium'
+												: ''}"
+											onmousedown={() => handleCountryChange(country.iso2)}
+										>
+											{country.emoji}
+											{country.name}
+										</button>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</div>
+
+					<!-- State searchable dropdown -->
+					{#if selectedCountryIso}
+						<div class="relative">
+							<input
+								type="text"
+								bind:value={stateSearch}
+								onfocus={() => (stateOpen = true)}
+								onblur={() => setTimeout(() => (stateOpen = false), 200)}
+								oninput={() => {
+									stateOpen = true
+									if (!stateSearch) {
+										selectedStateIso = ''
+										updatePosition()
+									}
+								}}
+								disabled={loadingStates}
+								placeholder={loadingStates
+									? m.loading()
+									: states.length > 0
+										? m.select_state()
+										: '—'}
+								class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:bg-gray-100"
+							/>
+							{#if stateOpen && filteredStates.length > 0}
+								<ul
+									class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
+								>
+									{#each filteredStates as state}
+										<li>
+											<button
+												type="button"
+												class="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 {selectedStateIso ===
+												state.iso2
+													? 'bg-blue-100 font-medium'
+													: ''}"
+												onmousedown={() => handleStateChange(state.iso2)}
+											>
+												{state.name}
+											</button>
+										</li>
+									{/each}
+								</ul>
+							{/if}
+						</div>
+					{/if}
+				</div>
 			</div>
 
 			<div class="flex items-center gap-2">
@@ -287,7 +462,9 @@
 						{#each formData.Characters as char, charIndex}
 							<div class="rounded-lg border border-gray-200 p-4">
 								<div class="mb-3 flex items-center justify-between">
-									<h4 class="font-medium text-gray-900">{m.character_number({ number: charIndex + 1 })}</h4>
+									<h4 class="font-medium text-gray-900">
+										{m.character_number({ number: charIndex + 1 })}
+									</h4>
 									<button
 										type="button"
 										onclick={() => removeCharacter(charIndex)}
@@ -305,7 +482,7 @@
 											secondaryText: c.originalName
 										}))}
 										bind:value={char.characterId}
-										onselect={(id) => (char.characterId = id.toString())}
+										onselect={(id) => (char.characterId = id)}
 										placeholder={m.search_character()}
 										required={true}
 										label={m.select_character()}
@@ -317,15 +494,17 @@
 											name: mk.name,
 											secondaryText: mk.originalName
 										}))}
-										bind:value={char.maker}
-										onselect={(id) => (char.maker = id.toString())}
+										bind:value={char.makerId}
+										onselect={(id) => (char.makerId = id)}
 										placeholder={m.search_maker()}
 										label={m.kiger_character_maker()}
 									/>
 
 									<div>
 										<div class="mb-2 flex items-center justify-between">
-											<label class="block text-sm font-medium text-gray-700"> {m.kiger_character_images()} </label>
+											<label class="block text-sm font-medium text-gray-700">
+												{m.kiger_character_images()}
+											</label>
 											<button
 												type="button"
 												onclick={() => addImage(charIndex)}

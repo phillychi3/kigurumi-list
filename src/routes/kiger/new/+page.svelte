@@ -9,11 +9,31 @@
 		type KigerSubmit,
 		type Character,
 		type Maker,
-		type CharacterData
+		type CharacterData,
+		type CharacterSubmit
 	} from '$lib/api'
 	import SocialMediaForm from '$lib/components/SocialMediaForm.svelte'
 	import SearchSelect from '$lib/components/SearchSelect.svelte'
 	import { onMount } from 'svelte'
+
+	interface ICountry {
+		iso2: string
+		name: string
+		emoji: string
+	}
+	interface IState {
+		iso2: string
+		name: string
+	}
+
+	async function fetchCountries(): Promise<ICountry[]> {
+		const res = await fetch('/api/locations?type=countries')
+		return res.json()
+	}
+	async function fetchStates(countryCode: string): Promise<IState[]> {
+		const res = await fetch(`/api/locations?type=states&countryCode=${countryCode}`)
+		return res.json()
+	}
 
 	let formData: KigerSubmit = $state({
 		name: '',
@@ -29,6 +49,23 @@
 	let makers: Maker[] = $state([])
 	// Track whether each character entry uses "existing" or "new" mode
 	let characterModes: ('existing' | 'new')[] = $state([])
+	let countries: ICountry[] = $state([])
+	let states: IState[] = $state([])
+	let selectedCountryIso = $state('')
+	let selectedStateIso = $state('')
+	let loadingStates = $state(false)
+	let countrySearch = $state('')
+	let stateSearch = $state('')
+	let countryOpen = $state(false)
+	let stateOpen = $state(false)
+	let filteredCountries = $derived(
+		countries.filter((c) =>
+			`${c.emoji} ${c.name}`.toLowerCase().includes(countrySearch.toLowerCase())
+		)
+	)
+	let filteredStates = $derived(
+		states.filter((s) => s.name.toLowerCase().includes(stateSearch.toLowerCase()))
+	)
 	let twitterInput = $state('')
 	let crawling = $state(false)
 	let crawlError = $state<string | null>(null)
@@ -37,9 +74,14 @@
 
 	onMount(async () => {
 		try {
-			const [charList, makerList] = await Promise.all([getCharacters(), getMakers()])
+			const [charList, makerList, countryList] = await Promise.all([
+				getCharacters(),
+				getMakers(),
+				fetchCountries()
+			])
 			characters = charList
 			makers = makerList
+			countries = countryList
 		} catch (e) {
 			console.error('Failed to load options:', e)
 		}
@@ -63,7 +105,6 @@
 			if (!formData.name) formData.name = result.name
 			if (!formData.bio) formData.bio = result.bio
 			if (!formData.profileImage) formData.profileImage = result.profileImage
-			if (!formData.position) formData.position = result.position
 
 			for (const [key, value] of Object.entries(result.socialMedia)) {
 				if (value && !formData.socialMedia[key]) {
@@ -80,6 +121,38 @@
 		} finally {
 			crawling = false
 		}
+	}
+
+	async function handleCountryChange(iso: string) {
+		selectedCountryIso = iso
+		selectedStateIso = ''
+		states = []
+		countrySearch = countries.find((c) => c.iso2 === iso)?.name ?? ''
+		stateSearch = ''
+		countryOpen = false
+		if (iso) {
+			loadingStates = true
+			try {
+				states = await fetchStates(iso)
+			} finally {
+				loadingStates = false
+			}
+		}
+		updatePosition()
+	}
+
+	function handleStateChange(iso: string) {
+		selectedStateIso = iso
+		stateSearch = states.find((s) => s.iso2 === iso)?.name ?? ''
+		stateOpen = false
+		updatePosition()
+	}
+
+	function updatePosition() {
+		const country = countries.find((c) => c.iso2 === selectedCountryIso)
+		const state = states.find((s) => s.iso2 === selectedStateIso)
+		const parts: string[] = [country?.name, state?.name].filter((p): p is string => Boolean(p))
+		formData.position = parts.join(', ')
 	}
 
 	async function handleSubmit(event: Event) {
@@ -181,15 +254,96 @@
 		</div>
 
 		<div>
-			<label for="position" class="mb-1 block text-sm font-medium text-gray-700">
+			<label for="kiger-country" class="mb-1 block text-sm font-medium text-gray-700">
 				{m.kiger_position()}
 			</label>
-			<input
-				type="text"
-				id="position"
-				bind:value={formData.position}
-				class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-			/>
+			<div class="space-y-2">
+				<!-- Country searchable dropdown -->
+				<div class="relative">
+					<input
+						id="kiger-country"
+						type="text"
+						bind:value={countrySearch}
+						onfocus={() => (countryOpen = true)}
+						onblur={() => setTimeout(() => (countryOpen = false), 200)}
+						oninput={() => {
+							countryOpen = true
+							if (!countrySearch) {
+								selectedCountryIso = ''
+								selectedStateIso = ''
+								states = []
+								stateSearch = ''
+								updatePosition()
+							}
+						}}
+						placeholder={m.select_country()}
+						class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+					/>
+					{#if countryOpen && filteredCountries.length > 0}
+						<ul
+							class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
+						>
+							{#each filteredCountries as country}
+								<li>
+									<button
+										type="button"
+										class="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 {selectedCountryIso ===
+										country.iso2
+											? 'bg-blue-100 font-medium'
+											: ''}"
+										onmousedown={() => handleCountryChange(country.iso2)}
+									>
+										{country.emoji}
+										{country.name}
+									</button>
+								</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
+
+				<!-- State searchable dropdown -->
+				{#if selectedCountryIso}
+					<div class="relative">
+						<input
+							type="text"
+							bind:value={stateSearch}
+							onfocus={() => (stateOpen = true)}
+							onblur={() => setTimeout(() => (stateOpen = false), 200)}
+							oninput={() => {
+								stateOpen = true
+								if (!stateSearch) {
+									selectedStateIso = ''
+									updatePosition()
+								}
+							}}
+							disabled={loadingStates}
+							placeholder={loadingStates ? m.loading() : states.length > 0 ? m.select_state() : '—'}
+							class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:bg-gray-100"
+						/>
+						{#if stateOpen && filteredStates.length > 0}
+							<ul
+								class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
+							>
+								{#each filteredStates as state}
+									<li>
+										<button
+											type="button"
+											class="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 {selectedStateIso ===
+											state.iso2
+												? 'bg-blue-100 font-medium'
+												: ''}"
+											onmousedown={() => handleStateChange(state.iso2)}
+										>
+											{state.name}
+										</button>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</div>
+				{/if}
+			</div>
 		</div>
 
 		<div class="flex items-center gap-2">
@@ -216,7 +370,7 @@
 					onclick={() => {
 						formData.Characters = [
 							...formData.Characters,
-							{ characterId: '', maker: '', images: [] }
+							{ characterId: null, makerId: null, images: [] }
 						]
 						characterModes = [...characterModes, 'existing']
 					}}

@@ -111,5 +111,8 @@
 	"no_characters_hint": "No characters added yet, click the button above to add",
 	"maker_label": "Maker:",
 	"source_search_placeholder": "Search existing sources...",
-	"source_search_label": "Search existing sources"
+	"source_search_label": "Search existing sources",
+	"select_country": "Select a country",
+	"select_state": "Select a state/province",
+	"select_city": "Select a city"
 }

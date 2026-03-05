@@ -45,6 +45,7 @@
 		]
 	},
 	"dependencies": {
+		"@countrystatecity/countries": "^1.0.5",
 		"@iconify/svelte": "^5.2.1",
 		"bits-ui": "^2.15.5",
 		"dompurify": "^3.3.1",
